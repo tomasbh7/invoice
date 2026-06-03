@@ -8,7 +8,7 @@ import com.invoice.api.entity.Invoice;
 
 public interface SvcInvoice {
 
-	public List<DtoInvoiceList> findAll();
-	public Invoice findById(Integer id);
-	public ApiResponse create();
+    public List<DtoInvoiceList> findAll();
+    public Invoice findById(String id);
+    public ApiResponse create();
 }

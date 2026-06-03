@@ -33,9 +33,30 @@ public class CtrlInvoice {
 	}
 
 	@GetMapping("/{id}")
-	@Operation(summary = "Consulta de factura", description = "Consulta el detalle de una factura")
-	public ResponseEntity<Invoice> findById(@PathVariable("id") Integer id) {		
-		return ResponseEntity.ok(svc.findById(id));
+	public ResponseEntity<Invoice> findById(@PathVariable("id") String id) {		
+	    return ResponseEntity.ok(svc.findById(id));
+	}
+	
+	@GetMapping("/test-token")
+	public ResponseEntity<String> testToken() {
+	    // Genera un token de prueba manualmente
+	    io.jsonwebtoken.Claims claims = io.jsonwebtoken.Jwts.claims();
+	    claims.setSubject("testuser");
+	    claims.put("id", 1);
+	    claims.put("roles", java.util.List.of(java.util.Map.of("authority", "CUSTOMER")));
+	    
+	    javax.crypto.SecretKey key = new javax.crypto.spec.SecretKeySpec(
+	        java.util.Base64.getDecoder().decode("8J+YjvCfpJPwn5ic8J+YmvCfmI3wn6Ww8J+ZgvCfpKM="), 
+	        "HmacSHA256"
+	    );
+	    
+	    String token = io.jsonwebtoken.Jwts.builder()
+	        .setClaims(claims)
+	        .setExpiration(new java.util.Date(System.currentTimeMillis() + 86400000))
+	        .signWith(key)
+	        .compact();
+	    
+	    return ResponseEntity.ok(token);
 	}
 	
 	@PostMapping
